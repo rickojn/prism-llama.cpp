@@ -453,10 +453,26 @@ size_t server_tokens::get_common_prefix(const server_tokens & b) const {
     const size_t max_idx = std::min(tokens.size(), b.tokens.size());
 
     if (!has_mtmd) {
-        for (size_t i = 0; i < max_idx; ++i) {
-            if (tokens[i] == b.tokens[i]) {
+        size_t diff = 0;
+        for (size_t i = 0; i < max_idx; ++i) {             
+            if (tokens[i + diff] == b.tokens[i]) {
                 continue;
             }
+            // if the tokens[i] is <think> ignore everything until </think>
+            if (tokens[i] == 151667) { // <think>
+                diff++;
+                while (i + diff < max_idx && tokens[i + diff] != 151668) { // </think>
+                    diff++;
+                }
+                if (i + diff < max_idx && tokens[i + diff] == 151668) {
+                    diff+= 2; 
+                    if (tokens[i + diff] == b.tokens[i]) {
+                        continue;
+                    }
+                    return i;
+                }
+            }
+
 
             return i;
         }
@@ -1081,6 +1097,7 @@ json oaicompat_chat_params_parse(
 
     // Apply chat template to the list of messages
     auto chat_params = common_chat_templates_apply(opt.tmpls.get(), inputs);
+    printf("Applied chat template, final prompt:\n%s\n", chat_params.prompt.c_str());
 
     /* Append assistant prefilled message */
     if (prefill_assistant_message) {
