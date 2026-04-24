@@ -458,6 +458,7 @@ size_t server_tokens::get_common_prefix(const server_tokens & b) const {
             if (tokens[i + diff] == b.tokens[i]) {
                 continue;
             }
+            // rickojn
             // if the tokens[i] is <think> ignore everything until </think>
             if (tokens[i] == 151667) { // <think>
                 diff++;
