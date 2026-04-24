@@ -2048,6 +2048,7 @@ bool server_prompt_cache::load(server_prompt & prompt, const server_tokens & tok
 
     // find the most similar cached prompt, that would also preserve the most context
     for (auto it = states.begin(); it != states.end(); ++it) {
+        printf("in loop\n");
         const int lcp_cur = it->tokens.get_common_prefix(tokens_new);
 
         const float f_keep_cur = float(lcp_cur) / it->tokens.size();

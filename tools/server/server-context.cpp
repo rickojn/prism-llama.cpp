@@ -978,6 +978,11 @@ private:
 
                 const auto & tokens = slot.prompt.tokens;
 
+                // print cached prompt tokens for debugging
+                printf("BLUFFER LOG!!!!!!1: slot %d cached prompt tokens: %s \n", slot.id, tokens.detokenize(ctx, true).c_str());
+                
+                // SLT_DBG(slot, "cached prompt tokens: %s\n", tokens.detokenize(ctx).c_str());
+
                 // skip the slot if it does not contains cached tokens
                 if (tokens.empty()) {
                     continue;
