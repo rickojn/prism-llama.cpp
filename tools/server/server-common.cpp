@@ -1079,8 +1079,14 @@ json oaicompat_chat_params_parse(
     }
     inputs.force_pure_content = opt.force_pure_content;
 
+    
+
     // Apply chat template to the list of messages
     auto chat_params = common_chat_templates_apply(opt.tmpls.get(), inputs);
+
+    // print the final prompt after applying the template for debugging
+
+    SRV_INF("BLUFFER: final prompt after applying template:\n%s\n", chat_params.prompt.c_str());
 
     /* Append assistant prefilled message */
     if (prefill_assistant_message) {
