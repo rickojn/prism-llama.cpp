@@ -461,22 +461,27 @@ size_t server_tokens::get_common_prefix(const server_tokens & b) const {
             // if the tokens[i] is <think> ignore everything until </think>
             if (tokens[i] == 151667) { // <think>
                 diff++;
+                SRV_INF("Found <think> at position %zu, ignoring differences until </think>\n", i);
                 while (i + diff < max_idx && tokens[i + diff] != 151668) { // </think>
                     diff++;
                 }
                 if (i + diff < max_idx && tokens[i + diff] == 151668) {
+                    SRV_INF("Found </think> at position %zu\n", i + diff);
                     diff+= 2; 
                     if (tokens[i + diff] == b.tokens[i]) {
                         continue;
                     }
                     return i;
+                    SRV_INF("didn't find </think> after <think>, returning at position %zu\n", i);
                 }
             }
 
 
+            SRV_INF("Tokens differ at position %zu: %d vs %d\n", i, tokens[i], b.tokens[i]);
             return i;
         }
 
+        SRV_INF("One sequence is a subsequence of the other with length %zu\n", max_idx);
         return max_idx;
     }
 
